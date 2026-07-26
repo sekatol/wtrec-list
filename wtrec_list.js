@@ -40,7 +40,7 @@
     title.innerHTML = `<b>WTRec List (total ${sessions.length})</b>`;
     const closeBtn = document.createElement('button');
     closeBtn.textContent = '✕';
-    closeBtn.style.cssText = 'background: #c33; border: none; color: white; padding: 2px 8px; border-radius: 4px; cursor: pointer;';
+    closeBtn.style.cssText = 'background: #c33; border: none; color: white; padding: 2px 6px; border-radius: 4px; cursor: pointer;';
     closeBtn.onclick = () => panel.remove();
     title.appendChild(closeBtn);
     panel.appendChild(title);
