@@ -38,10 +38,10 @@
     const title = document.createElement('div');
     title.style.cssText = 'display: flex; justify-content: space-between; margin-bottom: 12px;';
     title.innerHTML = `<b>WTRec List (total ${sessions.length})</b>`;
-    const closeBtn = document.createElement('button');
-    closeBtn.textContent = '✕';
-    closeBtn.style.cssText = 'background: #c33; border: none; color: white; padding: 2px 6px; border-radius: 4px; cursor: pointer;';
-    closeBtn.onclick = () => panel.remove();
+    const closeButton = document.createElement('button');
+    closeButton.textContent = '✕';
+    closeButton.style.cssText = 'background: #c33; border: none; color: white; padding: 2px 6px; border-radius: 4px; cursor: pointer;';
+    closeButton.onclick = () => panel.remove();
     title.appendChild(closeBtn);
     panel.appendChild(title);
 
