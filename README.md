@@ -1,5 +1,5 @@
 # wtrec-list
-A browser console script that lists all wtrec's stored in dwem-wtrec IndexedDB
+A browser console script that lists all dcss wtrec's stored in dwem-wtrec IndexedDB
 
 # Usage
 - Goto the webpage `crawl.nemelex.cards/#lobby`
@@ -7,5 +7,7 @@ A browser console script that lists all wtrec's stored in dwem-wtrec IndexedDB
 - Click on the `Console` tab
 - Paste the following command into it and press `Enter`
 ```javascript
-fetch('https://raw.githubusercontent.com/sekatol/wtrec-list/main/wtrec_list.js').then(r => r.text()).then(code => eval(code));
+fetch('https://raw.githubusercontent.com/sekatol/wtrec-list/main/wtrec_list.js')
+  .then(r => r.text())
+  .then(code => eval(code));
 ```
