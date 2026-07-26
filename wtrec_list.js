@@ -49,7 +49,17 @@
     const list = document.createElement('div');
     list.style.cssText = 'display: flex; flex-direction: column; gap: 6px;';
 
-    // Download button
+    // Play record function
+    async function playSession(session) {
+        try {
+            const blob = await mod.buildZipFromSession(session);
+            await mod.playWTRec(blob, { autoplay: true, speed: 2 });
+        } catch (err) {
+            alert(`Play record failed: ${err.message}`);
+        }
+    }
+    
+    // Download function
     async function downloadSession(session) {
         try {
             const blob = await mod.buildZipFromSession(session);
@@ -66,7 +76,7 @@
     }
 
     // Add each session
-    for (const sess of sessions) {
+    for (const session of sessions) {
         const item = document.createElement('div');
         item.style.cssText = `
             display: flex;
@@ -79,18 +89,31 @@
 
         // Basic information
         const info = document.createElement('span');
-        const msgCount = sess.data?.length || 0;
-        info.textContent = `${sess.name || 'Untitled'} (${sess.username || '?'}) - ${msgCount} messages`;
+        const messageCount = session.data?.length || 0;
+        info.textContent = `${session.name || 'Untitled'} (${session.username || '?'}) - ${messageCount} messages`;
         info.style.cssText = 'white-space: normal; word-wrap: break-word;';
+        
+        // Play button
+        const playButton = document.createElement('button');
+        playButton.textContent = '▶';
+        playButton.style.cssText = 'background: #28a; border: none; color: white; padding: 2px 6px; border-radius: 4px; cursor: pointer;';
+        playButton.onclick = (function(s) { return () => playSession(s); })(session);
 
         // Download button
-        const btn = document.createElement('button');
-        btn.textContent = '⬇';
-        btn.style.cssText = 'background: #2a6; border: none; color: white; padding: 2px 6px; border-radius: 4px; cursor: pointer;';
-        btn.onclick = (function(s) { return () => downloadSession(s); })(sess);
+        const downloadButton = document.createElement('button');
+        downloadButton.textContent = '⬇';
+        downloadButton.style.cssText = 'background: #2a6; border: none; color: white; padding: 2px 6px; border-radius: 4px; cursor: pointer;';
+        downloadButton.onclick = (function(s) { return () => downloadSession(s); })(session);
 
+        
+        // Buttons
+        const buttonGroup = document.createElement('span');
+        buttonGroup.style.cssText = 'display: flex; gap: 4px;';
+        buttonGroup.appendChild(playButton);
+        buttonGroup.appendChild(downloadButton);
+        
         item.appendChild(info);
-        item.appendChild(btn);
+        item.appendChild(buttonGroup);
         list.appendChild(item);
     }
 
