@@ -42,7 +42,7 @@
     closeButton.textContent = '✕';
     closeButton.style.cssText = 'background: #c33; border: none; color: white; padding: 2px 6px; border-radius: 4px; cursor: pointer;';
     closeButton.onclick = () => panel.remove();
-    title.appendChild(closeBtn);
+    title.appendChild(closeButton);
     panel.appendChild(title);
 
     // List
@@ -104,7 +104,6 @@
         downloadButton.textContent = '⬇';
         downloadButton.style.cssText = 'background: #2a6; border: none; color: white; padding: 2px 6px; border-radius: 4px; cursor: pointer;';
         downloadButton.onclick = (function(s) { return () => downloadSession(s); })(session);
-
         
         // Buttons
         const buttonGroup = document.createElement('span');
