@@ -1,7 +1,25 @@
-// ---- WTRec List ----
+function waitForModule(timeout = 10000) {
+    return new Promise((resolve) => {
+        const startTime = Date.now();
+        const check = () => {
+            const mod = window.DWEM?.Modules?.WTRec;
+            if (mod) {
+                resolve(mod);
+                return;
+            }
+            if (Date.now() - startTime > timeout) {
+                resolve(null);
+                return;
+            }
+            setTimeout(check, 200);
+        };
+        check();
+    });
+}
+
 (async function() {
     // Wait for WTRec module
-    const mod = DWEM?.Modules?.WTRec;
+    const mod = await waitForModule();
     if (!mod) {
         alert('WTRec module is not loaded.');
         return;
@@ -14,34 +32,52 @@
         return;
     }
 
-    // Create float panel
+    // Create list panel
     const panel = document.createElement('div');
     panel.style.cssText = `
         position: fixed;
         top: 20px;
         right: 20px;
-        width: 450px;
-        max-height: 80vh;
+        width: 550px;
+        max-height: 70vh;
         overflow-y: auto;
-        background: #000;
-        color: #eee;
-        border: 1px solid #888;
-        border-radius: 6px;
-        padding: 9px;
         z-index: 99999;
-        font-family: sans-serif;
+
+        box-sizing: border-box;
+        margin: 0 0 12px 0;
+        padding: 8px;
+        border: 1px solid rgba(117, 183, 106, 0.55);
+            border-left-width: 1px;
+            border-left-style: solid;
+            border-left-color: rgba(117, 183, 106, 0.55);
+        border-left: 3px solid #75b76a;
+        border-radius: 6px;
+
+        background: rgba(9, 16, 12, 0.81);
+
+        color: #dcebd7;
         font-size: 13px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+        line-height: 1.45;
+
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
     `;
 
-    // Title and close button
+    // Title
     const title = document.createElement('div');
     title.style.cssText = 'display: flex; justify-content: space-between; margin-bottom: 12px;';
     title.innerHTML = `<b>WTRec List (total ${sessions.length})</b>`;
+
     const closeButton = document.createElement('button');
     closeButton.textContent = '✕';
-    closeButton.style.cssText = 'background: #c33; border: none; color: white; padding: 2px 6px; border-radius: 4px; cursor: pointer;';
+    closeButton.style.cssText = `
+        background: #c33;
+        border: none;
+        color: white;
+        padding: 2px 6px;
+        border-radius: 4px;
+        cursor: pointer;`;
     closeButton.onclick = () => panel.remove();
+
     title.appendChild(closeButton);
     panel.appendChild(title);
 
@@ -58,7 +94,7 @@
             alert(`Play record failed: ${err.message}`);
         }
     }
-    
+
     // Download function
     async function downloadSession(session) {
         try {
@@ -82,41 +118,53 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #333;
-            padding: 6px 10px;
-            border-radius: 4px;
-        `;
+            background: rgba(255, 255, 255, 0.10);
+            padding: 6px;
+            border-radius: 4px;`;
 
         // Basic information
         const info = document.createElement('span');
         const messageCount = session.data?.length || 0;
-        info.textContent = `${session.name || 'Untitled'} (${session.username || '?'}) - ${messageCount} messages`;
+        info.textContent = `${session.name || 'Untitled'} - ${messageCount} messages`;
         info.style.cssText = 'white-space: normal; word-wrap: break-word;';
-        
+
         // Play button
         const playButton = document.createElement('button');
         playButton.textContent = '▶';
-        playButton.style.cssText = 'background: #28a; border: none; color: white; padding: 2px 6px; border-radius: 4px; cursor: pointer;';
+        playButton.style.cssText = `
+            background: #28a;
+            border: none;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            cursor: pointer;`;
         playButton.onclick = (function(s) { return () => playSession(s); })(session);
 
         // Download button
         const downloadButton = document.createElement('button');
         downloadButton.textContent = '⬇';
-        downloadButton.style.cssText = 'background: #2a6; border: none; color: white; padding: 2px 6px; border-radius: 4px; cursor: pointer;';
+        downloadButton.style.cssText = `
+            background: #2a6;
+            border: none;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            cursor: pointer;`;
         downloadButton.onclick = (function(s) { return () => downloadSession(s); })(session);
-        
+
         // Buttons
         const buttonGroup = document.createElement('span');
         buttonGroup.style.cssText = 'display: flex; gap: 4px;';
         buttonGroup.appendChild(playButton);
         buttonGroup.appendChild(downloadButton);
-        
+
         item.appendChild(info);
         item.appendChild(buttonGroup);
         list.appendChild(item);
     }
 
     panel.appendChild(list);
+
     document.body.appendChild(panel);
 
     console.log('WTRec List loaded');
